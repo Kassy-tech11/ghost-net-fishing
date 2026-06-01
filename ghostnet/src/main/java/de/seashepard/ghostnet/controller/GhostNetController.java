@@ -1,9 +1,10 @@
-controller/GhostNetController.java
 package de.sheasepherd.ghostnet.controller;
 
 import de.sheasepherd.ghostnet.entity.GhostNet;
+import de.sheasepherd.ghostnet.entity.Rescuer;
 import de.sheasepherd.ghostnet.enums.GhostNetStatus;
 import de.sheasepherd.ghostnet.repository.GhostNetRepository;
+import de.sheasepherd.ghostnet.repository.RescuerRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -12,9 +13,12 @@ import org.springframework.web.bind.annotation.*;
 public class GhostNetController {
 
     private final GhostNetRepository ghostNetRepository;
+    private final RescuerRepository rescuerRepository;
 
-    public GhostNetController(GhostNetRepository ghostNetRepository) {
+    public GhostNetController(GhostNetRepository ghostNetRepository,
+                              RescuerRepository rescuerRepository) {
         this.ghostNetRepository = ghostNetRepository;
+        this.rescuerRepository = rescuerRepository;
     }
 
     @GetMapping("/")
@@ -38,7 +42,41 @@ public class GhostNetController {
         }
 
         ghostNetRepository.save(ghostNet);
+        return "redirect:/open-nets";
+    }
 
-        return "redirect:/report-net";
+    @GetMapping("/open-nets")
+    public String showOpenNets(Model model) {
+        model.addAttribute("ghostNets",
+                ghostNetRepository.findByStatus(GhostNetStatus.GEMELDET));
+        return "open-nets";
+    }
+
+    @GetMapping("/assign-net/{id}")
+    public String showAssignForm(@PathVariable Long id, Model model) {
+        GhostNet ghostNet = ghostNetRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Geisternetz nicht gefunden"));
+
+        model.addAttribute("ghostNet", ghostNet);
+        model.addAttribute("rescuer", new Rescuer());
+
+        return "assign-net";
+    }
+
+    @PostMapping("/assign-net/{id}")
+    public String assignNet(@PathVariable Long id,
+                            @ModelAttribute Rescuer rescuer) {
+
+        GhostNet ghostNet = ghostNetRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Geisternetz nicht gefunden"));
+
+        Rescuer savedRescuer = rescuerRepository.save(rescuer);
+
+        ghostNet.setRescuer(savedRescuer);
+        ghostNet.setStatus(GhostNetStatus.BERGUNG_BEVORSTEHEND);
+
+        ghostNetRepository.save(ghostNet);
+
+        return "redirect:/open-nets";
     }
 }
