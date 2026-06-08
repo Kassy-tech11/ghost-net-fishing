@@ -1,1 +1,8 @@
-src/main/java/de/seashepard/ghostnet/enums/GhostNetStatus.java
+package de.seashepard.ghostnet.enums;
+
+public enum GhostNetStatus {
+    GEMELDET,
+    BERGUNG_BEVORSTEHEND,
+    GEBORGEN,
+    VERSCHOLLEN
+}
