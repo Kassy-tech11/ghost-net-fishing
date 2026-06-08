@@ -8,6 +8,7 @@ import de.sheasepherd.ghostnet.repository.RescuerRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
 @Controller
 public class GhostNetController {
@@ -47,6 +48,10 @@ public class GhostNetController {
 
     @GetMapping("/open-nets")
     public String showOpenNets(Model model) {
+        List<GhostNetStatus> openStatuses = List.of(
+            GhostNetStatus.GEMELDET,
+            GhostNetStatus.BERGUNG_BEVORSTEHEND
+    );
         model.addAttribute("ghostNets",
                 ghostNetRepository.findByStatus(GhostNetStatus.GEMELDET));
         return "open-nets";
