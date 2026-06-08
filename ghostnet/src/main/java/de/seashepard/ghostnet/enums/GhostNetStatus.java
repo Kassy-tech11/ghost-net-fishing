@@ -1,5 +1,5 @@
 enums/GhostNetStatus.java
-  package de.sheasepherd.ghostnet.enums;
+  import package de.seashepard.ghostnet.enums;
 
 public enum GhostNetStatus {
     GEMELDET,
