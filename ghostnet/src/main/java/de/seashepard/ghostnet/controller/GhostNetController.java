@@ -79,4 +79,14 @@ public class GhostNetController {
 
         return "redirect:/open-nets";
     }
+    @PostMapping("/mark-recovered/{id}")
+    public String markRecovered(@PathVariable Long id) {
+    GhostNet ghostNet = ghostNetRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Geisternetz nicht gefunden"));
+
+    ghostNet.setStatus(GhostNetStatus.GEBORGEN);
+    ghostNetRepository.save(ghostNet);
+
+    return "redirect:/open-nets";
+    }
 }
