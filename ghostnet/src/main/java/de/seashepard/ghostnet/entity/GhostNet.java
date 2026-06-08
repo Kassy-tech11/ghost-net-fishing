@@ -81,4 +81,14 @@ public class GhostNet {
     public void setStatus(GhostNetStatus status) {
         this.status = status;
     }
+  @ManyToOne
+private Rescuer rescuer;
+
+public Rescuer getRescuer() {
+    return rescuer;
+}
+
+public void setRescuer(Rescuer rescuer) {
+    this.rescuer = rescuer;
+}
 }
