@@ -1,7 +1,7 @@
 entity/GhostNet.java
-  package de.sheasepherd.ghostnet.entity;
+  package de.seashepard.ghostnet.entity;
 
-import de.sheasepherd.ghostnet.enums.GhostNetStatus;
+import de.seashepard.ghostnet.enums.GhostNetStatus;
 import jakarta.persistence.*;
 
 @Entity
