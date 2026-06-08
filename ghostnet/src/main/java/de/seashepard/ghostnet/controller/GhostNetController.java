@@ -48,11 +48,12 @@ public class GhostNetController {
 
    @GetMapping("/open-nets")
 public String showOpenNets(Model model) {
-
-    model.addAttribute(
-            "ghostNets",
-            ghostNetRepository.findAll()
+    List<GhostNetStatus> openStatuses = List.of(
+            GhostNetStatus.GEMELDET,
+            GhostNetStatus.BERGUNG_BEVORSTEHEND
     );
+
+    model.addAttribute("ghostNets", ghostNetRepository.findByStatusIn(openStatuses));
 
     return "open-nets";
 }
